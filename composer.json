@@ -1,0 +1,22 @@
+{
+    "name": "starlight/package-filters",
+    "description": "",
+    "authors": [
+        {
+            "name": "somedeveloper",
+            "email": "someemail@ideil.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0"
+    },
+    "autoload": {
+        "classmap": [
+            "database/migrations"
+        ],
+        "psr-4": {
+            "Starlight\\PackageFilters\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
