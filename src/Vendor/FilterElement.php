@@ -82,7 +82,7 @@ class FilterElement {
      */
     protected function setQueryCurrentState(Builder $query)
     {
-        return $this->queryCurrentState = $query;
+        return $this->queryCurrentState = clone $query;
     }
 
     /**
@@ -151,9 +151,11 @@ class FilterElement {
         $query = $this->getQuery();
         $value = $this->getValue();
 
-        call_user_func($callback, $query, $value);
+        if(!empty($value) || $value === '0' ) {
+            call_user_func($callback, $query, $value);
+        }
 
-        $this->setQueryCurrentState(clone $query);
+        $this->setQueryCurrentState($query);
 
         return $this->setQuery($query);
     }

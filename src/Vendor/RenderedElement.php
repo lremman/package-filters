@@ -12,7 +12,7 @@ class RenderedElement {
     public $name;
 
     /**
-     * @var Illuminate\Support\Collection
+     * @var Illuminate\Support\Collection / array / string
      */
     public $items;
 
@@ -24,10 +24,15 @@ class RenderedElement {
     /**
      *
      */
-    public function __construct($name, Collection $items, $active = null)
+    public function __construct($name, $items, $active = null)
     {
         $this->name = $name;
-        $this->items = collect($items);
+        if(is_array( $items)) {
+            $this->items = collect($items);
+        } else {
+            $this->items = $items;
+        }
         $this->active = $active;
     }
+
 }

@@ -127,6 +127,8 @@ class Renderer {
      */
     public function renderItem(FilterElement $filterElement)
     {
+        $parentElement = $this->getParent($filterElement);
+
         $renderer = $filterElement->getRenderer();
 
         // If renderer is not defined
@@ -143,11 +145,20 @@ class Renderer {
         $rendererArgumentsCount = (new \ReflectionFunction($renderer))
             ->getNumberOfParameters();
 
-        if($rendererArgumentsCount) {
+        if($rendererArgumentsCount == 2) {
+            $parent_value = $parentElement ? $parentElement->getValue() : null;
             $items = $this->getParentItems($filterElement);
-            $renderedItems = call_user_func($renderer, $items);
+            $renderedItems = call_user_func($renderer, $parent_value, $items);
+
+        } elseif($rendererArgumentsCount == 1) {
+
+            $parent_value = $parentElement ? $parentElement->getValue() : null;
+            $renderedItems = call_user_func($renderer, $parent_value);
+
         } else {
+
             $renderedItems = call_user_func($renderer);
+
         }
 
         // If renderer return no value

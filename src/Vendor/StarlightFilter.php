@@ -5,6 +5,7 @@ namespace Starlight\PackageFilters\Vendor;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Input;
 
 class StarlightFilter {
 
@@ -54,13 +55,13 @@ class StarlightFilter {
         $this->renderItems();
         $renderer = $this->getRenderer();
 
-        return $renderer->getAll();
+        return $renderer->getAllItems();
     }
 
     /**
      *
      */
-    public function renderSelect($name, $title, array $attributes = [])
+    public function getRenderedElement($name)
     {
         $this->renderItems();
 
@@ -68,9 +69,7 @@ class StarlightFilter {
 
         $renderedElement = $renderer->getRenderedElement($name);
 
-        $formElement = HtmlBuilder::buildSelect([$name => $title], $renderedElement, $attributes);
-
-        return $formElement;
+        return $renderedElement;
     }
 
     /**
@@ -93,7 +92,7 @@ class StarlightFilter {
     /**
      * @param Family $family
      */
-    public function setFamily(Family $family)
+    protected function setFamily(Family $family)
     {
         return static::$family = $family;
     }
@@ -103,7 +102,25 @@ class StarlightFilter {
      */
     public function getFamily()
     {
-        return self::$family;
+        if(!$family = self::$family)
+        {
+            $family = $this->createFamily();
+        }
+
+        return $family;
+    }
+
+    /**
+     *
+     */
+    protected function createFamily()
+    {
+        $filterElements = $this->getFilterElements();
+        $family = new Family($filterElements);
+
+        $this->setFamily($family);
+
+        return $family;
     }
 
     /**
@@ -144,6 +161,7 @@ class StarlightFilter {
         call_user_func($callback, $filter);
 
         static::$filterElements->put($name, $filter);
+
     }
 
     /**
@@ -166,7 +184,7 @@ class StarlightFilter {
 
         $filterElements = $this->getFilterElements();
 
-        $family = $this->setFamily(new Family($filterElements));
+        $family = $this->getFamily();
 
         $inputQueryState = $this->getInputQueryState();
 

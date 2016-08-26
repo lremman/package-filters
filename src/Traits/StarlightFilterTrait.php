@@ -2,13 +2,13 @@
 
 namespace Starlight\PackageFilters\Traits;
 
-use Starlight\PackageFilters\Filter;
+use Filter;
 
 trait StarlightFilterTrait {
 
     public static function bootStarlightFilterTrait()
     {
-        Filter::setQuery(self::query());
+        Filter::createFilter(self::query());
     }
 
     /**
@@ -16,7 +16,9 @@ trait StarlightFilterTrait {
      */
     public function scopeFilter($query, $name, $callback)
     {
-        Filter::register($name, $callback);
+        Filter::register($query, $name, $callback);
+
+        $query = Filter::getFilterByElementName($name)->getQuery();
 
         return $query;
     }

@@ -85,6 +85,31 @@ class Family {
     }
 
     /**
+     * @param  string $name \\Element name
+     * @return  Illuminate\Support\Collection
+     */
+    public function getFamilyChildren($name)
+    {
+        $children = [];
+        $isAfter = 0;
+
+        $familyMap = $this->getFamilyMap();
+
+        foreach($familyMap as $range) {
+            foreach($range as $filterName) {
+                if($name == $filterName) {
+                    $isAfter = 1;
+                    continue;
+                } elseif ($isAfter) {
+                    $children[] = $filterName;
+                }
+            }
+        }
+
+        return collect($children);
+    }
+
+    /**
      * @param  Illuminate\Support\Collection $filterElements
      * @return  Illuminate\Support\Collection
      */

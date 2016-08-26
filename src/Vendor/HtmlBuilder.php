@@ -35,4 +35,19 @@ class HtmlBuilder {
 
         return $formElement;
     }
+
+    /**
+     * @param  string  $name
+     * @param  RenderedElement  $renderedElement
+     * @param  array  $options
+     * @return string  rendered html code
+     */
+    public static function buildInputText($name, RenderedElement $renderedElement, array $options)
+    {
+        $selected = $renderedElement->active;
+
+        $formElement = Form::input('text', $name, $selected, $options);
+
+        return $formElement;
+    }
 }

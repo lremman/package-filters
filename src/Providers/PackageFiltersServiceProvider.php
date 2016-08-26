@@ -4,7 +4,6 @@ namespace Starlight\PackageFilters\Providers;
 
 use Packages;
 use Starlight\Kernel\Packages\AbstractServiceProvider;
-use Starlight\PackageFilters\Filter;
 
 class PackageFiltersServiceProvider extends AbstractServiceProvider
 {
@@ -23,24 +22,17 @@ class PackageFiltersServiceProvider extends AbstractServiceProvider
     {
 
         $this->app->singleton('starlightFilter', function(){
-            return new \Starlight\PackageFilters\Vendor\StarlightFilter;
+            return new \Starlight\PackageFilters\Filter;
         });
 
+        $this->publishAssetsDir(
+            $this->root('resources/assets'),
+            public_path('pkgs/package-filters')
+        );
 
+        $this->lazyAssetsDeclare('starlight-filter', [
+            static_asset('pkgs/package-filters/starlight-filter.js'),
+        ]);
 
-        // $this->addSidebarControl('package-filters', '\Packages\PackageFiltersController@getList', [
-        //     'title' => _('PackageFilters'),
-        //     'icon' => 'pencil',
-        // ]);
-
-        // // awesome injection
-        // // $this->registerInjectTpl(['SomeInjectLabel'], 'package-filters::inject.some-tpl', function ($entity) {
-        // //     return [];
-        // // });
-
-        // // awesome injection
-        // // $this->registerInjectTpl(['SomeInjectLabel'], 'package-filters::inject.some-tpl', function ($entity) {
-        // //     return [];
-        // // });
     }
 }
